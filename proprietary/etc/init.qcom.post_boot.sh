@@ -55,31 +55,31 @@ function configure_memory_parameters() {
     MemTotal=${MemTotalStr:16:8}
     MemTotalPg=$((MemTotal / 4))
     adjZeroMinFree=18432
-    # echo 1 > /sys/module/process_reclaim/parameters/enable_process_reclaim
-    # echo 70 > /sys/module/process_reclaim/parameters/pressure_max
-    # echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
+    echo 1 > /sys/module/process_reclaim/parameters/enable_process_reclaim
+    echo 70 > /sys/module/process_reclaim/parameters/pressure_max
+    echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
     echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
     if [ "$arch_type" == "aarch64" ] && [ $MemTotal -gt 2097152 ]; then
-        # echo 10 > /sys/module/process_reclaim/parameters/pressure_min
-        # echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
+        echo 10 > /sys/module/process_reclaim/parameters/pressure_min
+        echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
         echo "18432,23040,27648,32256,55296,80640" > /sys/module/lowmemorykiller/parameters/minfree
         echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
         adjZeroMinFree=18432
     elif [ "$arch_type" == "aarch64" ] && [ $MemTotal -gt 1048576 ]; then
-        # echo 10 > /sys/module/process_reclaim/parameters/pressure_min
-        # echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
+        echo 10 > /sys/module/process_reclaim/parameters/pressure_min
+        echo 1024 > /sys/module/process_reclaim/parameters/per_swap_size
         echo "14746,18432,22118,25805,40000,55000" > /sys/module/lowmemorykiller/parameters/minfree
         echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
         adjZeroMinFree=14746
     elif [ "$arch_type" == "aarch64" ]; then
-        # echo 50 > /sys/module/process_reclaim/parameters/pressure_min
-        # echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
+        echo 50 > /sys/module/process_reclaim/parameters/pressure_min
+        echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
         echo "14746,18432,22118,25805,40000,55000" > /sys/module/lowmemorykiller/parameters/minfree
         echo 81250 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
         adjZeroMinFree=14746
     else
-        # echo 50 > /sys/module/process_reclaim/parameters/pressure_min
-        # echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
+        echo 50 > /sys/module/process_reclaim/parameters/pressure_min
+        echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
         echo "15360,19200,23040,26880,34415,43737" > /sys/module/lowmemorykiller/parameters/minfree
         echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
         adjZeroMinFree=15360
@@ -89,12 +89,12 @@ function configure_memory_parameters() {
     echo 30 >  /sys/module/zcache/parameters/max_pool_percent
 
     # Zram disk - 512MB size
-    #zram_enable=`getprop ro.config.zram`
-    #if [ "$zram_enable" == "true" ]; then
-    #    echo 536870912 > /sys/block/zram0/disksize
-    #    mkswap /dev/block/zram0
-    #    swapon /dev/block/zram0 -p 32758
-    #fi
+    zram_enable=`getprop ro.config.zram`
+    if [ "$zram_enable" == "true" ]; then
+        echo 536870912 > /sys/block/zram0/disksize
+        mkswap /dev/block/zram0
+        swapon /dev/block/zram0 -p 32758
+    fi
 
     SWAP_ENABLE_THRESHOLD=1048576
     swap_enable=`getprop ro.config.swap`
@@ -1204,10 +1204,6 @@ case "$target" in
                     echo 40 > $gpu_bimc_io_percent
                 done
 
-                # input boost configuration
-                echo "1401600" > /sys/module/cpu_boost/parameters/input_boost_freq
-                echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
-
 		# Configure DCC module to capture critical register contents when device crashes
 		for DCC_PATH in /sys/bus/platform/devices/*.dcc*
 		do
@@ -1426,6 +1422,9 @@ case "$target" in
                 echo 200000 > /proc/sys/kernel/sched_freq_inc_notify
                 echo 200000 > /proc/sys/kernel/sched_freq_dec_notify
 
+                # chenyb1 Log kernel wake-up source
+                echo 1 > /sys/module/msm_show_resume_irq/parameters/debug_mask
+
                 # Set Memory parameters
                 configure_memory_parameters
 	;;
@@ -1454,7 +1453,7 @@ case "$target" in
                   # Start Host based Touch processing
                   case "$hw_platform" in
                     "MTP" | "Surf" | "RCM" )
-                        #start hbtp
+                        start hbtp
                         ;;
                   esac
                 # Apply Scheduler and Governor settings for 8917
@@ -1522,6 +1521,10 @@ case "$target" in
 
                 # re-enable thermal core_control now
                 echo 1 > /sys/module/msm_thermal/core_control/enabled
+
+                # Disable L2-GDHS low power modes
+                echo N > /sys/module/lpm_levels/perf/perf-l2-gdhs/idle_enabled
+                echo N > /sys/module/lpm_levels/perf/perf-l2-gdhs/suspend_enabled
 
                 # Bring up all cores online
                 echo 1 > /sys/devices/system/cpu/cpu1/online
@@ -1619,7 +1622,8 @@ case "$target" in
                 do
                     echo 40 > $gpu_bimc_io_percent
                 done
-                # disable thermal core_control to update interactive gov settings
+
+                # disable thermal core_control to update interactive gov and core_ctl settings
                 echo 0 > /sys/module/msm_thermal/core_control/enabled
 
                 # enable governor for perf cluster
@@ -1648,8 +1652,11 @@ case "$target" in
                 echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/sampling_down_factor
                 echo 768000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
 
-                # re-enable thermal core_control now
-                echo 1 > /sys/module/msm_thermal/core_control/enabled
+                # Disable L2-GDHS low power modes
+                echo N > /sys/module/lpm_levels/system/pwr/pwr-l2-gdhs/idle_enabled
+                echo N > /sys/module/lpm_levels/system/pwr/pwr-l2-gdhs/suspend_enabled
+                echo N > /sys/module/lpm_levels/system/perf/perf-l2-gdhs/idle_enabled
+                echo N > /sys/module/lpm_levels/system/perf/perf-l2-gdhs/suspend_enabled
 
                 # Bring up all cores online
                 echo 1 > /sys/devices/system/cpu/cpu1/online
@@ -1683,6 +1690,9 @@ case "$target" in
                 echo 40 > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
                 echo 100 > /sys/devices/system/cpu/cpu0/core_ctl/offline_delay_ms
                 echo 1 > /sys/devices/system/cpu/cpu0/core_ctl/is_big_cluster
+
+                # re-enable thermal core_control
+                echo 1 > /sys/module/msm_thermal/core_control/enabled
 
                 # Enable dynamic clock gating
                 echo 1 > /sys/module/lpm_levels/lpm_workarounds/dynamic_clock_gating
