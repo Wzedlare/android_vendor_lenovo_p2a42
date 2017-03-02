@@ -1,0 +1,5 @@
+<!-- add by lenovo-sw2 caijh, Warning :: only scofield need this feature for different color of back cover -->
+
+<permissions>
+    <feature name="com.lenovo.ziptheme.custompreload.support" />
+</permissions>

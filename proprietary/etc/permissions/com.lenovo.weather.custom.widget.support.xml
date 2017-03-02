@@ -1,0 +1,5 @@
+<!-- Lenovo-SW kongql1 add 2015-03-23 begin, Lenovo Weather custom widget support, ZOOMROW-95 -->
+<permissions>
+    <feature name="com.lenovo.weather.custom.widget.support" />
+</permissions>
+<!-- Lenovo-SW kongql1 add 2015-03-23 end, ZOOMROW-95 -->

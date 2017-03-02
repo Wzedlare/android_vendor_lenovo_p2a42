@@ -1,0 +1,4 @@
+<!--@2016-02-19:Support by ThemeCenter to send broadcast to lock screen when apply lock screen wallpaper -->
+<permissions>
+    <feature name="com.lenovo.themecenter.sendbroadcasttolockscreen.support" />
+</permissions>

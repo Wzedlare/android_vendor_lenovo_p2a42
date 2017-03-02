@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+    <!-- 范例 -->
+    <CoverApp
+        resource_subtype="demo"
+        cover_app="com.lenovo.coverapp.demo/com.lenovo.coverapp.demo.MainActivity"
+        theme_receiver=""
+        />
+    <!-- 幻想 -->
+    <CoverApp
+        resource_subtype="TimeVision"
+        cover_app="com.lenovo.coverapp.fantasy/com.lenovo.coverapp.fantasy.MainActivity"
+        theme_receiver="com.lenovo.coverapp.fantasy/com.lenovo.coverapp.base.ThemeReceiver"
+        />
+    <!-- 泡泡 -->
+    <CoverApp
+        resource_subtype="BubbleII"
+        cover_app="com.lenovo.coverapp.bubble/com.lenovo.coverapp.bubble.CoverAppActivity"
+        theme_receiver="com.lenovo.coverapp.bubble/com.lenovo.coverapp.bubble.ThemeReceiver"
+        />
+    <!-- 脚本 -->
+    <CoverApp
+        resource_subtype="script_1"
+        cover_app="com.lenovo.coverapp.script/com.lenovo.coverapp.script.MainActivity"
+        theme_receiver="com.lenovo.coverapp.script/com.lenovo.coverapp.script.ThemeReceiver"
+        />
+    <!-- 简约 -->
+    <CoverApp
+        resource_subtype="SimpleTime"
+        cover_app="com.lenovo.coverapp.simpletime/com.lenovo.coverapp.simpletime.MainActivity"
+        theme_receiver="com.lenovo.coverapp.simpletime/com.lenovo.coverapp.simpletime.base.ThemeReceiver"
+        />
+    <CoverApp
+        resource_subtype="Time"
+        cover_app="com.lenovo.coverapp.simpletime/com.lenovo.coverapp.simpletime.MainActivity"
+        theme_receiver="com.lenovo.coverapp.simpletime/com.lenovo.coverapp.simpletime.base.ThemeReceiver"
+        />
+    <!-- 微乐 -->
+    <CoverApp
+        resource_subtype="vlife"
+        cover_app="com.vlife.lenovo.wallpaper/com.vlife.coverapp.CoverAppActivity"
+        theme_receiver=""
+        />
+    <!-- [预研]泡泡u3d（若想验证主题包，需修改resource_subtype） -->
+    <CoverApp
+        resource_subtype=""
+        cover_app="com.lenovo.bubbleuntiy/com.lenovo.bubbleunity.MainActivity"
+        theme_receiver="com.lenovo.bubbleuntiy/com.lenovo.coverapp.script.ThemeReceiver"
+        />
+    <!-- [预研]脚本opengl（若想验证主题包，需修改resource_subtype） -->
+    <CoverApp
+        resource_subtype=""
+        cover_app="com.lenovo.coverapp.demo/com.lenovo.coverapp.CoverAppGLSurfaceViewMainActivity"
+        theme_receiver="com.lenovo.coverapp.demo/"
+        />
+</Root>
