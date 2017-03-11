@@ -1,6 +1,0 @@
-<!-- Lenovo-SW zhuohf1 add 2014-10-31 begin, app icon manager, fixed IKUIPRC-39 PRCUICCR-19 -->
-<!-- This is the feature set for appiconintegration support -->
-<permissions>
-    <feature name="com.lenovo.framework.appiconintegration.support" />
-</permissions>
-<!-- Lenovo-SW zhuohf1 add 2014-10-31 end, fixed IKUIPRC-39 PRCUICCR-19 -->
